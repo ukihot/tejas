@@ -1,10 +1,26 @@
 {
-  "compilerOptions": {
-    "composite": true,
-    "skipLibCheck": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true
-  },
-  "include": ["vite.config.ts"]
+	"compilerOptions": {
+		// --- Project References 用 ---
+		"composite": true,
+
+		// --- 型チェック ---
+		"strict": true,
+		"skipLibCheck": true,
+
+		// --- モジュール解決 ---
+		"target": "ES2022", // Node 18+ or Tauri runtime に最適
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+
+		// --- パス補完 ---
+		"resolveJsonModule": true,
+		"allowJs": false,
+		"isolatedModules": true,
+
+		// --- 出力抑制 ---
+		"noEmit": true
+	},
+	"include": ["vite.config.ts"]
 }

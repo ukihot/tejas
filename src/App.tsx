@@ -1,15 +1,32 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AuthProvider, useAuth } from "./adapters/hooks/AuthContext";
+import { RequireAuth } from "./adapters/views/_components/RequireAuth";
 import Home from "./adapters/views/pages/Home";
+import SignIn from "./adapters/views/pages/SignIn";
 
-function App() {
+function AppRoutes() {
+	const { authenticated } = useAuth();
+
 	return (
-		<BrowserRouter>
-			<Routes>
+		<Routes>
+			{/* 認証保護ルート */}
+			<Route element={<RequireAuth isAuthenticated={authenticated} />}>
 				<Route path="/" element={<Home />} />
-				{/* 他のページを増やす場合はここに追加 */}
-			</Routes>
-		</BrowserRouter>
+				{/* 追加の保護ルートもここに */}
+			</Route>
+
+			{/* 非保護ルート */}
+			<Route path="/signin" element={<SignIn />} />
+		</Routes>
 	);
 }
 
-export default App;
+export default function App() {
+	return (
+		<AuthProvider>
+			<BrowserRouter>
+				<AppRoutes />
+			</BrowserRouter>
+		</AuthProvider>
+	);
+}

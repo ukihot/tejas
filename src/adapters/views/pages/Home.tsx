@@ -1,183 +1,159 @@
-import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 import { type FormEvent, useId, useState } from "react";
+import { AppInteractor } from "../../../applications/interactors/AppInteractor";
+import { TauriDatabaseRepository } from "../../../infrastructures/dao/TauriDatabaseRepository";
+import { AppController } from "../../controllers/AppController";
+import { AppPresenter } from "../../presenters/AppPresenter";
 
 export default function Home() {
-	const idGreetInput = useId();
+	const idUsernameInput = useId();
+	const idPasswordInput = useId();
+	const idDisplayNameInput = useId();
 
-	const [greetMsg, setGreetMsg] = useState<string>("");
-	const [name, setName] = useState<string>("");
-
+	// ----------------------
+	// State
+	// ----------------------
 	const [dbPath, setDbPath] = useState<string>("");
 	const [dbMsg, setDbMsg] = useState<string>("");
+	const [tableMsg, setTableMsg] = useState<string>("");
 
-	const [migrationMsg, setMigrationMsg] = useState<string>("");
+	const [username, setUsername] = useState<string>("");
+	const [password, setPassword] = useState<string>("");
+	const [displayName, setDisplayName] = useState<string>("");
+	const [userMsg, setUserMsg] = useState<string>("");
 
-	// --------------------
-	// 非同期コマンド呼び出し
-	// --------------------
-	async function greet(): Promise<void> {
-		console.log("[greet] Invoking greet command with name:", name);
-		try {
-			const msg = await invoke<string>("greet", { name });
-			console.log("[greet] Result:", msg);
-			setGreetMsg(msg);
-		} catch (err) {
-			console.error("[greet] Error:", err);
-			setGreetMsg(`Error: ${(err as Error).message}`);
-		}
-	}
+	const [dbConfirmed, setDbConfirmed] = useState<boolean>(false);
 
-	async function setDatabasePath(): Promise<void> {
-		console.log("[setDatabasePath] dbPath:", dbPath);
-		if (!dbPath) {
-			setDbMsg("Please select a database path first.");
-			return;
-		}
+	// ----------------------
+	// Setup Adapter
+	// ----------------------
+	const repository = new TauriDatabaseRepository();
+	const presenter = new AppPresenter(
+		setDbMsg,
+		setTableMsg,
+		setUserMsg,
+		() => {},
+	);
+	const interactor = new AppInteractor(repository, presenter);
+	const controller = new AppController(interactor);
 
-		try {
-			const msg = await invoke<string>("set_db_path", { path: dbPath });
-			console.log("[setDatabasePath] Result:", msg);
-			setDbMsg(msg);
-		} catch (err) {
-			console.error("[setDatabasePath] Error:", err);
-			setDbMsg(`Error: ${(err as Error).message}`);
-		}
-	}
-
-	async function runMigration(): Promise<void> {
-		console.log("[runMigration] Starting migration");
-		try {
-			const msg = await invoke<string>("run_migration");
-			console.log("[runMigration] Result:", msg);
-			setMigrationMsg(msg);
-		} catch (err) {
-			console.error("[runMigration] Error:", err);
-			setMigrationMsg(`Error: ${(err as Error).message}`);
-		}
-	}
-
-	// --------------------
-	// ファイル選択ダイアログ（既存DB）
-	// --------------------
-	const handleOpenDialog = async () => {
-		console.log("[handleOpenDialog] Opening file dialog for existing DB");
-		try {
-			const selected = await open({
-				multiple: false,
-				filters: [{ name: "SQLite Database", extensions: ["db", "sqlite"] }],
-			});
-
-			console.log("[handleOpenDialog] Selected:", selected);
-
-			if (selected) {
-				setDbPath(selected);
-				setDbMsg(`Selected: ${selected}`);
-			} else {
-				setDbMsg("No file selected.");
-			}
-		} catch (err) {
-			console.error("[handleOpenDialog] Error:", err);
-			setDbMsg(`Error: ${(err as Error).message}`);
-		}
-	};
-
-	// --------------------
-	// フォルダ選択＋新規DB作成
-	// --------------------
-	const handleCreateDb = async () => {
-		console.log("[handleCreateDb] Opening folder dialog to create new DB");
-		try {
-			const folderPath = await open({
-				directory: true,
-				multiple: false,
-			});
-
-			console.log("[handleCreateDb] Selected folder:", folderPath);
-
-			if (!folderPath) {
-				setDbMsg("No folder selected.");
-				return;
-			}
-
-			// Rust側で database.db を作成
-			const msg = await invoke<string>("create_db", {
-				folderPath,
-			});
-			console.log("[handleCreateDb] create_db result:", msg);
-			setDbMsg(msg);
-
-			// 作成した DB を自動でセット
-			const newDbPath = `${folderPath}/database.db`;
-			console.log("[handleCreateDb] New DB path set to:", newDbPath);
-			setDbPath(newDbPath);
-		} catch (err) {
-			console.error("[handleCreateDb] Error:", err);
-			setDbMsg(`Error: ${(err as Error).message}`);
-		}
-	};
-
-	// --------------------
-	// 汎用フォーム submit
-	// --------------------
+	// ----------------------
+	// Handlers
+	// ----------------------
 	async function handleSubmit(
 		event: FormEvent<HTMLFormElement>,
 		callback: () => Promise<void>,
 	) {
 		event.preventDefault();
-		console.log("[handleSubmit] Form submitted");
 		await callback();
 	}
 
-	// --------------------
-	// JSX
-	// --------------------
+	const handleOpenDbDialog = async () => {
+		const selected = await open({
+			multiple: false,
+			filters: [{ name: "SQLite Database", extensions: ["db", "sqlite"] }],
+		});
+		if (selected) {
+			setDbPath(selected as string);
+			setDbConfirmed(false);
+		}
+	};
+
+	const confirmDbPath = async () => {
+		await controller.setDatabasePath(dbPath);
+		setDbConfirmed(true);
+	};
+
+	const createTableHandler = async () => {
+		await controller.createTable();
+	};
+
+	const createUserHandler = async () => {
+		await controller.createUser(username, password, displayName);
+	};
+
+	// ----------------------
+	// UI
+	// ----------------------
 	return (
-		<main className="container">
-			<h1>Welcome to Tauri + React + TypeScript</h1>
-
-			{/* Greetフォーム */}
-			<form className="row" onSubmit={(e) => void handleSubmit(e, greet)}>
-				<input
-					id={idGreetInput}
-					value={name}
-					onChange={(e) => setName(e.currentTarget.value)}
-					placeholder="Enter a name..."
-				/>
-				<button type="submit">Greet</button>
-			</form>
-			<p className={greetMsg.startsWith("Error:") ? "error" : ""}>{greetMsg}</p>
+		<main
+			style={{
+				maxWidth: "600px",
+				margin: "2rem auto",
+				fontFamily: "sans-serif",
+			}}
+		>
+			<h1>Tauri + React + TypeScript</h1>
 
 			<hr />
 
-			{/* DB操作 */}
-			<div className="row">
-				<button type="button" onClick={handleOpenDialog}>
-					Set DB Path
-				</button>
-				<button type="button" onClick={handleCreateDb}>
-					Create New DB
-				</button>
-				<p>{dbPath ? `Selected Path: ${dbPath}` : dbMsg}</p>
-			</div>
+			{/* DB Path Section */}
+			<section style={{ marginBottom: "2rem" }}>
+				<h2>Database Setup</h2>
+				<div style={{ display: "flex", gap: "1rem", marginBottom: "0.5rem" }}>
+					<button type="button" onClick={handleOpenDbDialog}>
+						Select Existing DB
+					</button>
+					<button type="button" onClick={handleOpenDbDialog}>
+						Create New DB
+					</button>
+				</div>
+				<p>{dbPath ? `Selected: ${dbPath}` : dbMsg}</p>
+				{dbPath && (
+					<form onSubmit={(e) => void handleSubmit(e, confirmDbPath)}>
+						<button type="submit">Confirm Database</button>
+					</form>
+				)}
+			</section>
 
-			<form
-				className="row"
-				onSubmit={(e) => void handleSubmit(e, setDatabasePath)}
-			>
-				<button type="submit">Confirm DB Path</button>
-			</form>
-			<p className={dbMsg.startsWith("Error:") ? "error" : ""}>{dbMsg}</p>
+			{/* Create Table Section */}
+			<section style={{ marginBottom: "2rem" }}>
+				<h2>Create Users Table</h2>
+				<p>This will create the users table in the selected database.</p>
+				{dbConfirmed && (
+					<form onSubmit={(e) => void handleSubmit(e, createTableHandler)}>
+						<button type="submit">Create Users Table</button>
+					</form>
+				)}
+				{!dbConfirmed && <p>Please confirm database first.</p>}
+				<p>{tableMsg}</p>
+			</section>
 
-			<hr />
-
-			{/* マイグレーション実行 */}
-			<button type="button" onClick={runMigration}>
-				Run Migration
-			</button>
-			<p className={migrationMsg.startsWith("Error:") ? "error" : ""}>
-				{migrationMsg}
-			</p>
+			{/* Create User Section */}
+			<section style={{ marginBottom: "2rem" }}>
+				<h2>Create User</h2>
+				<form onSubmit={(e) => void handleSubmit(e, createUserHandler)}>
+					<input
+						id={idUsernameInput}
+						value={username}
+						onChange={(e) => setUsername(e.currentTarget.value)}
+						placeholder="Username"
+						disabled={!dbConfirmed}
+						style={{ display: "block", marginBottom: "0.5rem", width: "100%" }}
+					/>
+					<input
+						id={idPasswordInput}
+						value={password}
+						onChange={(e) => setPassword(e.currentTarget.value)}
+						placeholder="Password"
+						type="password"
+						disabled={!dbConfirmed}
+						style={{ display: "block", marginBottom: "0.5rem", width: "100%" }}
+					/>
+					<input
+						id={idDisplayNameInput}
+						value={displayName}
+						onChange={(e) => setDisplayName(e.currentTarget.value)}
+						placeholder="Display Name (optional)"
+						disabled={!dbConfirmed}
+						style={{ display: "block", marginBottom: "0.5rem", width: "100%" }}
+					/>
+					<button type="submit" disabled={!dbConfirmed}>
+						Create User
+					</button>
+				</form>
+				<p className={userMsg.startsWith("Error:") ? "error" : ""}>{userMsg}</p>
+			</section>
 		</main>
 	);
 }
