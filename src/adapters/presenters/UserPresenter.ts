@@ -1,13 +1,13 @@
-import type { OutputPort } from "../../applications/OutputPorts";
+import type { UserOutputPort } from "../../applications/OutputPorts";
 import type {
-	CheckAdResponse,
+	AuthenticateUserResponseDTO,
 	MessageResponse,
 } from "../../applications/ResponseDTOs";
 
 type SetMessageFn = (msg: string) => void;
 type SetAuthFn = (auth: boolean) => void;
 
-export class AppPresenter implements OutputPort {
+export class UserPresenter implements UserOutputPort {
 	constructor(
 		private setDbMsg: SetMessageFn,
 		private setMigrationMsg: SetMessageFn,
@@ -15,7 +15,7 @@ export class AppPresenter implements OutputPort {
 		private setAuthenticated: SetAuthFn,
 	) {}
 
-	presentAdCheckResult(resp: CheckAdResponse): void {
+	presentAdCheckResult(resp: AuthenticateUserResponseDTO): void {
 		const { allowed, message } = resp;
 
 		// メッセージ反映

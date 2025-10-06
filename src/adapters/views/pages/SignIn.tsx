@@ -1,10 +1,10 @@
 import { type FormEvent, useId, useMemo, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { AppInteractor } from "../../../applications/interactors/AppInteractor";
-import { TauriDatabaseRepository } from "../../../infrastructures/dao/TauriDatabaseRepository";
-import { AppController } from "../../controllers/AppController";
+import { UserInteractor } from "../../../applications/interactors/UserInteractor";
 import { useAuth } from "../../hooks/AuthContext";
-import { AppPresenter } from "../../presenters/AppPresenter";
+import { UserPresenter } from "../../presenters/UserPresenter";
+import { UserController } from "../../controllers/UserController";
+import { UserDAO } from "../../../infrastructures/dao/UserDAO";
 
 export default function SignIn() {
 	// ----------------------
@@ -34,7 +34,7 @@ export default function SignIn() {
 	// ----------------------
 	const presenter = useMemo(
 		() =>
-			new AppPresenter(
+			new UserPresenter(
 				() => {}, // DBメッセージ不要
 				() => {}, // Migrationメッセージ不要
 				setLoginMsg, // AD審査メッセージ
@@ -45,8 +45,8 @@ export default function SignIn() {
 
 	const controller = useMemo(
 		() =>
-			new AppController(
-				new AppInteractor(new TauriDatabaseRepository(), presenter),
+			new UserController(
+				new UserInteractor(new UserDAO(), presenter),
 			),
 		[presenter],
 	);

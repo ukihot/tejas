@@ -1,19 +1,24 @@
 [package]
-name = "tejas"
+name = "dharma"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["me"]
+authors = ["Yu Tokunaga <tokunaga.y@tyco.co.jp>"]
 edition = "2021"
+description = "Dharma: Tauri-based information asset management system with AD authentication"
+license = "Apache-2.0"
+repository = "https://github.com/ukihot/dharma"
+keywords = ["tauri", "ad", "ldap", "password-security"]
+readme = "README.md"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
+# --------------------
+# ライブラリ設定
+# --------------------
 [lib]
-# The `_lib` suffix may seem redundant but it is necessary
-# to make the lib name unique and wouldn't conflict with the bin name.
-# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
-name = "tejas_lib"
+name = "dharma_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
+# --------------------
+# ビルド依存
+# --------------------
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
 

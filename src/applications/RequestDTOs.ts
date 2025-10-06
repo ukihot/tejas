@@ -1,18 +1,13 @@
-export interface CreateUserRequest {
-	username: string;
+/**
+ * ユーザ認証リクエスト
+ */
+export type AuthenticateUserRequestDTO = {
+	userId: string;
 	password: string;
 	displayName?: string;
-}
+};
 
-export interface DbPathRequest {
-	path: string;
-}
-
-export interface CreateDbRequest {
-	folderPath: string;
-}
-
-export interface CheckAdRequest {
+export interface CheckAdRequestDTO {
 	username: string;
 	password: string;
 	domain: string;

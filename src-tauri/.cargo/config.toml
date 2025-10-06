@@ -1,0 +1,22 @@
+[build]
+target-dir = "target"
+
+[profile.release]
+opt-level = "z"
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+debug = false
+incremental = false
+strip = "symbols"
+
+[profile.dev]
+opt-level = 1
+debug = true
+incremental = true
+
+[target.'cfg(target_os = "windows")']
+rustflags = [
+    "-C", "link-arg=/OPT:REF",
+    "-C", "link-arg=/OPT:ICF"
+]

@@ -1,7 +1,10 @@
-import type { CheckAdResponse, MessageResponse } from "./ResponseDTOs";
+import type {
+	AuthenticateUserResponseDTO,
+	MessageResponse,
+} from "./ResponseDTOs";
 
-export interface OutputPort {
+export interface UserOutputPort {
 	presentMessage(resp: MessageResponse): void;
 
-	presentAdCheckResult(resp: CheckAdResponse): void;
+	presentAdCheckResult(resp: AuthenticateUserResponseDTO): void;
 }

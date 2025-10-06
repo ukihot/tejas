@@ -1,8 +1,8 @@
-export interface MessageResponse {
+export type MessageResponse = {
 	message: string;
-}
+};
 
-export interface CheckAdResponse {
+export type AuthenticateUserResponseDTO = {
 	allowed: boolean; // 審査結果
 	message: string; // メッセージ添付
-}
+};

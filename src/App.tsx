@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from "./adapters/hooks/AuthContext";
 import { RequireAuth } from "./adapters/views/_components/RequireAuth";
 import Home from "./adapters/views/pages/Home";
 import SignIn from "./adapters/views/pages/SignIn";
+import './adapters/views/styles/globals.css';
 
 function AppRoutes() {
 	const { authenticated } = useAuth();

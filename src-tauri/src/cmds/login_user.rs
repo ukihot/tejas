@@ -1,7 +1,7 @@
 use ldap3::{LdapConnAsync, Scope, SearchEntry};
 use serde::Deserialize;
 
-const GROUP_CN: &str = "Tejas Users";
+const GROUP_CN: &str = "Dharma Users";
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]

@@ -1,0 +1,52 @@
+name: Deploy Vitest coverage to GitHub Pages
+
+on:
+  push:
+    branches:
+      - develop
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    name: Run tests and upload coverage artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Ensure pnpm is available
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run vitest (CI) to generate coverage
+        run: pnpm run test:ci
+
+      - name: Show coverage files (debug)
+        run: ls -la coverage || true
+
+      - name: Upload coverage to GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: coverage
+
+  deploy:
+    name: Deploy artifact to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1

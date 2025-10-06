@@ -1,5 +1,5 @@
 {
-	"name": "tejas",
+	"name": "dharma",
 	"private": true,
 	"version": "0.1.0",
 	"type": "module",
@@ -7,23 +7,29 @@
 		"dev": "vite",
 		"build": "tsc --noEmit && vite build",
 		"tauri": "tauri",
-		"check": "tsc --noEmit && biome check --write ./src"
+		"check": "tsc --noEmit && biome check --write",
+		"test": "vitest",
+		"test:ci": "vitest run --coverage --reporter=dot"
 	},
 	"dependencies": {
+		"@tailwindcss/vite": "^4.1.14",
 		"@tauri-apps/api": "^2",
 		"@tauri-apps/plugin-dialog": "~2.4.0",
 		"@tauri-apps/plugin-opener": "^2",
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0",
-		"react-router-dom": "^7.9.3"
+		"react-router-dom": "^7.9.3",
+		"tailwindcss": "^4.1.14"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.2.5",
 		"@tauri-apps/cli": "^2",
-		"@types/react": "^19.2.0",
-		"@types/react-dom": "^19.2.0",
+		"@types/react": "^19.2.2",
+		"@types/react-dom": "^19.2.1",
 		"@vitejs/plugin-react": "^5.0.4",
+		"@vitest/coverage-v8": "3.2.4",
 		"typescript": "~5.9.3",
-		"vite": "^7.1.9"
+		"vite": "^7.1.9",
+		"vitest": "^3.2.4"
 	}
 }
