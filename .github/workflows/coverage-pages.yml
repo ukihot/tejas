@@ -6,7 +6,7 @@ on:
       - develop
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -22,12 +22,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
 
       - name: Ensure pnpm is available
         run: |
           corepack enable
           corepack prepare pnpm@latest --activate
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -38,15 +45,30 @@ jobs:
       - name: Show coverage files (debug)
         run: ls -la coverage || true
 
-      - name: Upload coverage to GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v1
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
         with:
+          name: coverage-artifact
           path: coverage
 
   deploy:
-    name: Deploy artifact to GitHub Pages
+    name: Deploy coverage to gh-pages branch
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-artifact
+          path: coverage
+
+      - name: Deploy to gh-pages (safe)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./coverage
+          publish_branch: gh-pages
+          # create an explicit commit message including the sha
+          commit_message: "ci: update coverage from ${GITHUB_SHA}"
+          # keep files from previous builds only if needed; default is replace
+          allow_empty_commit: true
