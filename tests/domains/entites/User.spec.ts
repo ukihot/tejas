@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { User } from "../../src/domains/entites/User";
-import { FailedCount } from "../../src/domains/values/FailedCount";
-import { LastLogin } from "../../src/domains/values/LastLogin";
-import type { Role } from "../../src/domains/values/Role";
-import { UserId } from "../../src/domains/values/UserId";
+import { User } from "../../../src/domains/entites/User";
+import { FailedCount } from "../../../src/domains/values/FailedCount";
+import { LastLogin } from "../../../src/domains/values/LastLogin";
+import type { Role } from "../../../src/domains/values/Role";
+import { UserId } from "../../../src/domains/values/UserId";
 
 describe("User entity", () => {
 	const base = new User(

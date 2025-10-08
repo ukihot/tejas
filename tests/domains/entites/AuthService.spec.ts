@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { User } from "../../src/domains/entites/User";
-import { AuthService } from "../../src/domains/services/AuthService";
-import { FailedCount } from "../../src/domains/values/FailedCount";
-import { LastLogin } from "../../src/domains/values/LastLogin";
-import { LockPeriod } from "../../src/domains/values/LockPeriod";
-import { PasswordHash } from "../../src/domains/values/PasswordHash";
-import type { Role } from "../../src/domains/values/Role";
-import { UserId } from "../../src/domains/values/UserId";
+import { User } from "../../../src/domains/entites/User";
+import { AuthService } from "../../../src/domains/services/AuthService";
+import { FailedCount } from "../../../src/domains/values/FailedCount";
+import { LastLogin } from "../../../src/domains/values/LastLogin";
+import { LockPeriod } from "../../../src/domains/values/LockPeriod";
+import { PasswordHash } from "../../../src/domains/values/PasswordHash";
+import type { Role } from "../../../src/domains/values/Role";
+import { UserId } from "../../../src/domains/values/UserId";
 
 describe("AuthService", () => {
 	const makeUser = (

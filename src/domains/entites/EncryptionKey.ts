@@ -1,7 +1,8 @@
+import type { EntityBase } from "../EntityBase";
 import type { KeyId } from "../values/KeyId";
 import type { UserId } from "../values/UserId";
 
-export class EncryptionKey {
+export class EncryptionKey implements EntityBase<KeyId> {
 	constructor(
 		readonly id: KeyId,
 		readonly type: KeyType,
@@ -35,5 +36,9 @@ export class EncryptionKey {
 			this.rotatedAt,
 			at,
 		);
+	}
+
+	equals(other: EncryptionKey): boolean {
+		return this.id.equals(other.id);
 	}
 }

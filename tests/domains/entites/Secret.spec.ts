@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { Secret } from "../../src/domains/entites/Secret";
-import { SecretId } from "../../src/domains/values/SecretId";
-import { SecretStatus } from "../../src/domains/values/SecretStatus";
-import { SecretType } from "../../src/domains/values/SecretType";
-import { SecretValue } from "../../src/domains/values/SecretValue";
-import { UserId } from "../../src/domains/values/UserId";
+import { Secret } from "../../../src/domains/entites/Secret";
+import { SecretId } from "../../../src/domains/values/SecretId";
+import { SecretStatus } from "../../../src/domains/values/SecretStatus";
+import { SecretType } from "../../../src/domains/values/SecretType";
+import { SecretValue } from "../../../src/domains/values/SecretValue";
+import { UserId } from "../../../src/domains/values/UserId";
 
 describe("Secret entity", () => {
 	const id = new SecretId("s1");

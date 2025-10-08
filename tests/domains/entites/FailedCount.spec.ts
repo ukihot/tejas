@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { FailedCount } from "../../src/domains/values/FailedCount";
+import { FailedCount } from "../../../src/domains/values/FailedCount";
 
 describe("FailedCount", () => {
 	it("cannot be negative and supports zero/increment", () => {

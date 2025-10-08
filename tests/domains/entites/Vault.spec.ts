@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { Vault } from "../../src/domains/entites/Vault";
-import { BackupMetadata } from "../../src/domains/values/BackupMetadata";
-import { VaultId } from "../../src/domains/values/VaultId";
-import { VaultStatus } from "../../src/domains/values/VaultStatus";
+import { Vault } from "../../../src/domains/entites/Vault";
+import { BackupMetadata } from "../../../src/domains/values/BackupMetadata";
+import { VaultId } from "../../../src/domains/values/VaultId";
+import { VaultStatus } from "../../../src/domains/values/VaultStatus";
 
 describe("Vault entity", () => {
 	const id = new VaultId("v1");

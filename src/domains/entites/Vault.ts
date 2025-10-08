@@ -1,8 +1,9 @@
+import type { EntityBase } from "../EntityBase";
 import type { BackupMetadata } from "../values/BackupMetadata";
 import type { VaultId } from "../values/VaultId";
 import type { VaultStatus } from "../values/VaultStatus";
 
-export class Vault {
+export class Vault implements EntityBase<VaultId> {
 	constructor(
 		readonly id: VaultId,
 		private readonly status: VaultStatus,
@@ -23,5 +24,9 @@ export class Vault {
 
 	getBackups(): BackupMetadata[] {
 		return [...this.backups];
+	}
+
+	equals(other: Vault): boolean {
+		return this.id.equals(other.id);
 	}
 }

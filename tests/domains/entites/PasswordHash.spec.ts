@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PasswordHash } from "../../src/domains/values/PasswordHash";
+import { PasswordHash } from "../../../src/domains/values/PasswordHash";
 
 describe("PasswordHash", () => {
 	it("accepts valid hash format and rejects others", () => {

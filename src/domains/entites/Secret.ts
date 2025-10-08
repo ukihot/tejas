@@ -1,10 +1,11 @@
+import type { EntityBase } from "../EntityBase";
 import type { SecretId } from "../values/SecretId";
 import { SecretStatus } from "../values/SecretStatus";
 import type { SecretType } from "../values/SecretType";
 import type { SecretValue } from "../values/SecretValue";
 import type { UserId } from "../values/UserId";
 
-export class Secret {
+export class Secret implements EntityBase<SecretId> {
 	constructor(
 		readonly id: SecretId,
 		readonly type: SecretType,
@@ -49,5 +50,9 @@ export class Secret {
 			this.ownerId,
 			SecretStatus.Revoked(),
 		);
+	}
+
+	equals(other: Secret): boolean {
+		return this.id.equals(other.id);
 	}
 }

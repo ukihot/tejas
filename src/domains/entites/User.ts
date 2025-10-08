@@ -1,3 +1,4 @@
+import type { EntityBase } from "../EntityBase";
 import { FailedCount } from "../values/FailedCount";
 import { LastLogin } from "../values/LastLogin";
 import { LockPeriod } from "../values/LockPeriod";
@@ -5,7 +6,7 @@ import type { PasswordHash } from "../values/PasswordHash";
 import type { Role } from "../values/Role";
 import type { UserId } from "../values/UserId";
 
-export class User {
+export class User implements EntityBase<UserId> {
 	constructor(
 		readonly id: UserId,
 		readonly roles: Role[],
@@ -83,5 +84,9 @@ export class User {
 			null,
 			new LastLogin(at),
 		);
+	}
+
+	equals(other: User): boolean {
+		return this.id.equals(other.id);
 	}
 }
