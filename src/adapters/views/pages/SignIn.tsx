@@ -1,10 +1,16 @@
 import { type FormEvent, useId, useMemo, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { UserInteractor } from "../../../applications/interactors/UserInteractor";
+import { UserDAO } from "../../../infrastructures/dao/UserDAO";
+import { UserController } from "../../controllers/UserController";
 import { useAuth } from "../../hooks/AuthContext";
 import { SignInPresenter } from "../../presenters/SignInPresenter";
-import { UserController } from "../../controllers/UserController";
-import { UserDAO } from "../../../infrastructures/dao/UserDAO";
+import { Card } from "../_components/Card";
+import { Logo } from "../_components/Logo";
+import { Message } from "../_components/Message";
+import { PrimaryButton } from "../_components/PrimaryButton";
+import { TextInput } from "../_components/TextInput";
+import ThemeToggle from "../_components/ThemeToggle";
 
 export default function SignIn() {
 	// ----------------------
@@ -32,10 +38,16 @@ export default function SignIn() {
 	// ----------------------
 	// Controller Setup
 	// ----------------------
-	const presenter = useMemo(() => new SignInPresenter(setLoginMsg, setAuthenticated), [setAuthenticated]);
+	const presenter = useMemo(
+		() => new SignInPresenter(setLoginMsg, setAuthenticated),
+		[setAuthenticated],
+	);
 
 	const controller = useMemo(
-		() => new UserController(new UserInteractor(new UserDAO(), undefined, presenter)),
+		() =>
+			new UserController(
+				new UserInteractor(new UserDAO(), undefined, presenter),
+			),
 		[presenter],
 	);
 
@@ -49,7 +61,6 @@ export default function SignIn() {
 		event.preventDefault();
 		try {
 			await controller.checkAd(username, password, domain, domainController);
-			// Presenter側で setAuthenticated が呼ばれる
 		} catch (err) {
 			setAuthenticated(false);
 			setLoginMsg(`Error: ${(err as Error).message}`);
@@ -60,56 +71,51 @@ export default function SignIn() {
 	// UI
 	// ----------------------
 	return (
-		<main
-			style={{
-				maxWidth: "400px",
-				margin: "2rem auto",
-				fontFamily: "sans-serif",
-			}}
-		>
-			<h1>Sign In</h1>
-			<form onSubmit={handleSubmit}>
-				<input
-					id={idUsername}
-					value={username}
-					onChange={(e) => setUsername(e.currentTarget.value)}
-					placeholder="Username"
-					required
-					style={{ display: "block", marginBottom: "0.5rem", width: "100%" }}
-				/>
-				<input
-					id={idPassword}
-					type="password"
-					value={password}
-					onChange={(e) => setPassword(e.currentTarget.value)}
-					placeholder="Password"
-					required
-					style={{ display: "block", marginBottom: "0.5rem", width: "100%" }}
-				/>
-				<input
-					id={idDomain}
-					value={domain}
-					onChange={(e) => setDomain(e.currentTarget.value)}
-					placeholder="Domain"
-					style={{ display: "block", marginBottom: "0.5rem", width: "100%" }}
-				/>
-				<input
-					id={idDc}
-					value={domainController}
-					onChange={(e) => setDomainController(e.currentTarget.value)}
-					placeholder="Domain Controller"
-					style={{ display: "block", marginBottom: "0.5rem", width: "100%" }}
-				/>
-				<button type="submit" style={{ display: "block", width: "100%" }}>
-					Sign In
-				</button>
+		<main className="flex min-h-screen flex-col items-center justify-center bg-white p-8 transition-colors duration-300 dark:bg-brand">
+			{/* ロゴ */}
+			<Logo />
+
+			{/* テーマ切替 */}
+			<div className="mb-6">
+				<ThemeToggle />
+			</div>
+
+			{/* フォーム */}
+			<form className="w-full max-w-md" onSubmit={handleSubmit}>
+				<Card>
+					<TextInput
+						id={idUsername}
+						value={username}
+						onChange={(e) => setUsername(e.currentTarget.value)}
+						placeholder="Username"
+						required
+					/>
+					<TextInput
+						id={idPassword}
+						type="password"
+						value={password}
+						onChange={(e) => setPassword(e.currentTarget.value)}
+						placeholder="Password"
+						required
+					/>
+					<TextInput
+						id={idDomain}
+						value={domain}
+						onChange={(e) => setDomain(e.currentTarget.value)}
+						placeholder="Domain"
+					/>
+					<TextInput
+						id={idDc}
+						value={domainController}
+						onChange={(e) => setDomainController(e.currentTarget.value)}
+						placeholder="Domain Controller"
+					/>
+					<PrimaryButton type="submit">Sign In</PrimaryButton>
+				</Card>
 			</form>
 
-			{loginMsg && (
-				<p style={{ color: loginMsg.startsWith("Error:") ? "red" : "green" }}>
-					{loginMsg}
-				</p>
-			)}
+			{/* メッセージ */}
+			{loginMsg && <Message text={loginMsg} />}
 		</main>
 	);
 }

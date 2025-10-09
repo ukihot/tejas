@@ -1,13 +1,26 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.2.5/schema.json",
 	"files": {
-		"includes": ["src/**/*.ts", "tests/**/*.ts", "*.ts"],
+		"includes": [
+			"src/**/*.ts",
+			"src/**/*.tsx",
+			"src/**/*.css",
+			"tests/**/*.ts",
+			"tests/**/*.tsx"
+		],
 		"ignoreUnknown": true
 	},
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"nursery": {
+				"useSortedClasses": { "level": "error", "fix": "safe", "options": {} }
+			},
+			"suspicious": { "noUnknownAtRules": "warn" }
+		},
+		"domains": {
+			"react": "recommended"
 		}
 	},
 	"formatter": {
