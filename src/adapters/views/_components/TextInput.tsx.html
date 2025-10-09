@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/adapters/controllers/UserController.ts</title>
+    <title>Code coverage report for src/adapters/views/_components/TextInput.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../prettify.css" />
-    <link rel="stylesheet" href="../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../sort-arrow-sprite.png);
+            background-image: url(../../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/adapters/controllers</a> UserController.ts</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/adapters/views/_components</a> TextInput.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -105,16 +105,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -131,46 +123,54 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import type { UserInputPort } from "../../applications/InputPorts";
-import type {
-	AuthenticateUserRequestDTO,
-	CheckAdRequestDTO,
-} from "../../applications/RequestDTOs";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import type React from "react";
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export class UserController {</span>
-<span class="cstat-no" title="statement not covered" >	constructor(private readonly userInput: UserInputPort) {}</span>
+type TextInputProps = {
+	id?: string;
+	value: string;
+	onChange: (e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; void;
+	placeholder?: string;
+	type?: React.HTMLInputTypeAttribute;
+	required?: boolean;
+	className?: string;
+};
 &nbsp;
-	/**
-	 * ユーザ認証
-	 */
-<span class="cstat-no" title="statement not covered" >	async authenticateUser(userId: string, password: string) {</span>
-<span class="cstat-no" title="statement not covered" >		const request: AuthenticateUserRequestDTO = { userId, password };</span>
-<span class="cstat-no" title="statement not covered" >		return await this.userInput.authenticate(request);</span>
-<span class="cstat-no" title="statement not covered" >	}</span>
+<span class="cstat-no" title="statement not covered" >export const TextInput = ({</span>
+<span class="cstat-no" title="statement not covered" >	id,</span>
+<span class="cstat-no" title="statement not covered" >	value,</span>
+<span class="cstat-no" title="statement not covered" >	onChange,</span>
+<span class="cstat-no" title="statement not covered" >	placeholder,</span>
+<span class="cstat-no" title="statement not covered" >	type = "text",</span>
+<span class="cstat-no" title="statement not covered" >	required = false,</span>
+<span class="cstat-no" title="statement not covered" >	className = "",</span>
+<span class="cstat-no" title="statement not covered" >}: TextInputProps) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >	return (</span>
+<span class="cstat-no" title="statement not covered" >		&lt;input</span>
+<span class="cstat-no" title="statement not covered" >			id={id}</span>
+<span class="cstat-no" title="statement not covered" >			type={type}</span>
+<span class="cstat-no" title="statement not covered" >			value={value}</span>
+<span class="cstat-no" title="statement not covered" >			onChange={onChange}</span>
+<span class="cstat-no" title="statement not covered" >			placeholder={placeholder}</span>
+<span class="cstat-no" title="statement not covered" >			required={required}</span>
+<span class="cstat-no" title="statement not covered" >			className={`mb-4 w-full rounded-md border border-steel bg-white px-4 py-3 text-steel-dark transition-colors focus:border-accent focus:outline-none dark:border-gray-500 dark:bg-gray-700 dark:text-white ${className}</span>
+      `}
+<span class="cstat-no" title="statement not covered" >		/&gt;</span>
+	);
+<span class="cstat-no" title="statement not covered" >};</span>
 &nbsp;
-	/**
-	 * ADチェック
-	 */
-<span class="cstat-no" title="statement not covered" >	async checkAd(</span>
-<span class="cstat-no" title="statement not covered" >		username: string,</span>
-<span class="cstat-no" title="statement not covered" >		password: string,</span>
-<span class="cstat-no" title="statement not covered" >		domain: string,</span>
-<span class="cstat-no" title="statement not covered" >		domainController: string,</span>
-<span class="cstat-no" title="statement not covered" >	) {</span>
-<span class="cstat-no" title="statement not covered" >		const request: CheckAdRequestDTO = {</span>
-<span class="cstat-no" title="statement not covered" >			username,</span>
-<span class="cstat-no" title="statement not covered" >			password,</span>
-<span class="cstat-no" title="statement not covered" >			domain,</span>
-<span class="cstat-no" title="statement not covered" >			domainController,</span>
-<span class="cstat-no" title="statement not covered" >		};</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >		return await this.userInput.checkAd?.(request);</span>
-<span class="cstat-no" title="statement not covered" >	}</span>
-<span class="cstat-no" title="statement not covered" >}</span>
+<span class="cstat-no" title="statement not covered" >export default TextInput;</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -180,14 +180,14 @@ import type {
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
                 at 2025-10-09T06:21:39.051Z
             </div>
-        <script src="../../../prettify.js"></script>
+        <script src="../../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../sorter.js"></script>
-        <script src="../../../block-navigation.js"></script>
+        <script src="../../../../sorter.js"></script>
+        <script src="../../../../block-navigation.js"></script>
     </body>
 </html>
     
