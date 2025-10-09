@@ -1,8 +1,13 @@
 import { type FormEvent, useId, useState } from "react";
 import { UserInteractor } from "../../../applications/interactors/UserInteractor";
-import { HomePresenter } from "../../presenters/HomePresenter";
 import { UserDAO } from "../../../infrastructures/dao/UserDAO";
 import { UserController } from "../../controllers/UserController";
+import { HomePresenter } from "../../presenters/HomePresenter";
+import { Card } from "../_components/Card";
+import { Logo } from "../_components/Logo";
+import { Message } from "../_components/Message";
+import { PrimaryButton } from "../_components/PrimaryButton";
+import { TextInput } from "../_components/TextInput";
 
 export default function Home() {
 	const idUsernameInput = useId();
@@ -27,7 +32,10 @@ export default function Home() {
 	// ----------------------
 	// Handlers
 	// ----------------------
-	async function handleSubmit(event: FormEvent<HTMLFormElement>, callback: () => Promise<void>) {
+	async function handleSubmit(
+		event: FormEvent<HTMLFormElement>,
+		callback: () => Promise<void>,
+	) {
 		event.preventDefault();
 		await callback();
 	}
@@ -44,41 +52,36 @@ export default function Home() {
 	// UI
 	// ----------------------
 	return (
-		<main
-			style={{
-				maxWidth: "600px",
-				margin: "2rem auto",
-				fontFamily: "sans-serif",
-			}}
-		>
-			<h1>Tauri + React + TypeScript</h1>
+		<main className="mx-auto my-8 max-w-[600px] p-4 font-sans">
+			<Logo />
 
-			<hr />
+			<h1 className="mb-2 font-semibold text-lg">Tauri + React + TypeScript</h1>
+			<hr className="mb-6" />
 
 			{/* Authenticate User Section */}
-			<section style={{ marginBottom: "2rem" }}>
-				<h2>Authenticate User</h2>
+			<section className="mb-8">
+				<h2 className="mb-4 font-medium text-base">Authenticate User</h2>
+
 				<form onSubmit={(e) => void handleSubmit(e, authenticateHandler)}>
-					<input
-						id={idUsernameInput}
-						value={username}
-						onChange={(e) => setUsername(e.currentTarget.value)}
-						placeholder="Username"
-						style={{ display: "block", marginBottom: "0.5rem", width: "100%" }}
-					/>
-					<input
-						id={idPasswordInput}
-						type="password"
-						value={password}
-						onChange={(e) => setPassword(e.currentTarget.value)}
-						placeholder="Password"
-						style={{ display: "block", marginBottom: "0.5rem", width: "100%" }}
-					/>
-					<button type="submit" style={{ display: "block", width: "100%" }}>
-						Authenticate
-					</button>
+					<Card>
+						<TextInput
+							id={idUsernameInput}
+							value={username}
+							onChange={(e) => setUsername(e.currentTarget.value)}
+							placeholder="Username"
+						/>
+						<TextInput
+							id={idPasswordInput}
+							type="password"
+							value={password}
+							onChange={(e) => setPassword(e.currentTarget.value)}
+							placeholder="Password"
+						/>
+						<PrimaryButton type="submit">Authenticate</PrimaryButton>
+					</Card>
 				</form>
-				<p className={userMsg.startsWith("Error:") ? "error" : ""}>{userMsg}</p>
+
+				{userMsg && <Message text={userMsg} />}
 			</section>
 		</main>
 	);

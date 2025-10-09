@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AuthProvider, useAuth } from "./adapters/hooks/AuthContext";
+import { ThemeProvider } from "./adapters/hooks/ThemeContext";
 import { RequireAuth } from "./adapters/views/_components/RequireAuth";
 import Home from "./adapters/views/pages/Home";
 import SignIn from "./adapters/views/pages/SignIn";
-import './adapters/views/styles/globals.css';
 
 function AppRoutes() {
 	const { authenticated } = useAuth();
@@ -25,9 +25,11 @@ function AppRoutes() {
 export default function App() {
 	return (
 		<AuthProvider>
-			<BrowserRouter>
-				<AppRoutes />
-			</BrowserRouter>
+			<ThemeProvider>
+				<BrowserRouter>
+					<AppRoutes />
+				</BrowserRouter>
+			</ThemeProvider>
 		</AuthProvider>
 	);
 }

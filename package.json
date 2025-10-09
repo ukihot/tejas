@@ -18,12 +18,13 @@
 		"@tauri-apps/plugin-opener": "^2",
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0",
-		"react-router-dom": "^7.9.3",
+		"react-router-dom": "^7.9.4",
 		"tailwindcss": "^4.1.14"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.2.5",
 		"@tauri-apps/cli": "^2",
+		"@types/node": "^24.7.0",
 		"@types/react": "^19.2.2",
 		"@types/react-dom": "^19.2.1",
 		"@vitejs/plugin-react": "^5.0.4",
