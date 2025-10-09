@@ -2,7 +2,7 @@ import { type FormEvent, useId, useMemo, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { UserInteractor } from "../../../applications/interactors/UserInteractor";
 import { useAuth } from "../../hooks/AuthContext";
-import { UserPresenter } from "../../presenters/UserPresenter";
+import { SignInPresenter } from "../../presenters/SignInPresenter";
 import { UserController } from "../../controllers/UserController";
 import { UserDAO } from "../../../infrastructures/dao/UserDAO";
 
@@ -32,22 +32,10 @@ export default function SignIn() {
 	// ----------------------
 	// Controller Setup
 	// ----------------------
-	const presenter = useMemo(
-		() =>
-			new UserPresenter(
-				() => {}, // DBメッセージ不要
-				() => {}, // Migrationメッセージ不要
-				setLoginMsg, // AD審査メッセージ
-				setAuthenticated, // Context の認証状態更新
-			),
-		[setAuthenticated],
-	);
+	const presenter = useMemo(() => new SignInPresenter(setLoginMsg, setAuthenticated), [setAuthenticated]);
 
 	const controller = useMemo(
-		() =>
-			new UserController(
-				new UserInteractor(new UserDAO(), presenter),
-			),
+		() => new UserController(new UserInteractor(new UserDAO(), undefined, presenter)),
 		[presenter],
 	);
 
